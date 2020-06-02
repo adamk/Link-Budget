@@ -3,8 +3,6 @@
 
 import math
 
-def sign(a):
-    return (a > 0) - (a < 0)
 # Gains
 tx_pwr = 0;
 tx_ant = 0;
