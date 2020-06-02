@@ -1,6 +1,7 @@
 # Adam Kimbrough - Link Margin Calculator
 from math import log10, pow
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Gains
 tx_pwr = 0;
@@ -8,6 +9,7 @@ tx_ant = 0;
 rx_ant = 0;
 
 # Pass Loss Info
+path_loss = 0;
 tx_ant_height = 0;
 rx_ant_height = 0;
 distance = 0;
@@ -24,6 +26,13 @@ thermal_noise_density = -174.0; # dBm
 
 noise_figure = 0;
 sig_to_noise = 0;
+
+# Prop Model Booleans
+fspl_bool = False
+fspl2_bool = False
+hms_bool = False
+hl_bool = False
+
 
 tx_pwr = float(input('Enter transmitter power (dBm): '));
 tx_ant = float(input('Enter transmitter ant gain: '));
@@ -44,7 +53,8 @@ def thermal_noise_power(tnd, bw):
 	tnp = tnd + 10*log10(1000000*bw);
 	return tnp
 
-def pl_calc(txpwr,txant, rxant,txant_height, rxant_height, dist, freq, bw, pwrbackoff, txfeed, rxfeed):
+def pl_calc():
+	global fspl_bool, fspl2_bool, hms_bool, hl_bool
 	have_rx_sens = input("Enter 'Y' if you have RX sensitivity, otherwise, 'N'...  ")
 	if (have_rx_sens.upper() == 'Y'):
 		manual_margin = int(input('Enter RX sensitivity: '));
@@ -53,7 +63,7 @@ def pl_calc(txpwr,txant, rxant,txant_height, rxant_height, dist, freq, bw, pwrba
 
 		if (prop_model.upper() == 'FSPL'):
 			path_loss = 20*log10(distance) + 20*log10(freq) + 32.44
-
+			fspl_bool = True
 		elif (prop_model.upper() == 'HMS'):
 
 			# Correction factor (medium-small city)
@@ -63,17 +73,20 @@ def pl_calc(txpwr,txant, rxant,txant_height, rxant_height, dist, freq, bw, pwrba
 			Lp = 69.55 + 26.16*log10(freq) - 13.82*log10(hb) - a_hm + (44.9 - 6.55*log10(hb))*log10(distance);
 			# Hata Model (Open Area) - based on urban losses
 			path_loss = Lp - 4.78*(pow(log10(freq), 2)) + 18.33*log10(freq) - 40.94;
-		elif (prop_model == 'HL'):
+			hms_bool = True
+		elif (prop_model.upper() == 'HL'):
 			# Correction factor (large city)
 			a_hm2 = 3.2*(pow(log10(11.75*hm),2)) - 4.97
 			# General Hata Model Equation
 			Lp = 69.55 + 26.16*log10(freq) - 13.82*log10(hb) - a_hm + (44.9 - 6.55*log10(hb))*log10(distance);
 			# Hata Model (Open Area) - based on urban losses
 			path_loss = Lp - 4.78*(pow(log10(freq), 2)) + 18.33*log10(freq) - 40.94;
+			hl_bool = True
 		elif (prop_model.upper() == 'FSPL2'):
 			# Free Space Path Loss Model w/ Ground Reflection
 			G = tx_ant * rx_ant
 			path_loss = 40*log10(distance*1000) - 10*log10(G*pow(hb,2)*pow(hm, 2))
+			fspl2_bool = True
 		else:
 			print('Invalid option')
 
@@ -92,7 +105,7 @@ def pl_calc(txpwr,txant, rxant,txant_height, rxant_height, dist, freq, bw, pwrba
 		prop_model = input("Choose propagation model: 'FSPL', 'HMS'(Hata med-small), 'HL'(Hata large), 'FSPL2'(ground refl only): ")
 		if (prop_model.upper() == 'FSPL'):
 			path_loss = 20*log10(distance) + 20*log10(freq) + 32.44
-
+			fspl_bool = True
 		elif (prop_model.upper() == 'HMS'):
 
 			# Correction factor (medium-small city)
@@ -102,6 +115,7 @@ def pl_calc(txpwr,txant, rxant,txant_height, rxant_height, dist, freq, bw, pwrba
 			Lp = 69.55 + 26.16*log10(freq) - 13.82*log10(hb) - a_hm + (44.9 - 6.55*log10(hb))*log10(distance);
 			# Hata Model (Open Area) - based on urban losses
 			path_loss = Lp - 4.78*(pow(log10(freq), 2)) + 18.33*log10(freq) - 40.94;
+			hms_bool = True
 		elif (prop_model.upper() == 'HL'):
 			# Correction factor (large city)
 			a_hm2 = 3.2*(pow(log10(11.75*hm),2)) - 4.97
@@ -109,10 +123,12 @@ def pl_calc(txpwr,txant, rxant,txant_height, rxant_height, dist, freq, bw, pwrba
 			Lp = 69.55 + 26.16*log10(freq) - 13.82*log10(hb) - a_hm + (44.9 - 6.55*log10(hb))*log10(distance);
 			# Hata Model (Open Area) - based on urban losses
 			path_loss = Lp - 4.78*(pow(log10(freq), 2)) + 18.33*log10(freq) - 40.94;
+			hl_bool = True
 		elif (prop_model.upper() == 'FSPL2'):
 			# Free Space Path Loss Model w/ Ground Reflection
 			G = tx_ant * rx_ant
 			path_loss = 40*log10(distance*1000) - 10*log10(G*pow(hb,2)*pow(hm, 2))
+			fspl2_bool = True
 		else:
 			print('Invalid option');
 
@@ -130,4 +146,23 @@ def pl_calc(txpwr,txant, rxant,txant_height, rxant_height, dist, freq, bw, pwrba
 	else:
 		print('Invalid input');
 
-pl_calc(tx_pwr,tx_ant, rx_ant, tx_ant_height, rx_ant_height, distance, freq, detect_bw, pwr_back_off, tx_feed, rx_feed)
+	return (fspl_bool, fspl2_bool, hms_bool, hl_bool)
+
+
+def plp(pl, total_dist, model1, model2, model3, model4, tx_freq):
+	path_loss_arr = []
+	dist_arr = []
+	total_dist = total_dist
+	for dist in np.arange(0.1, total_dist, 0.1):
+		if model1:
+			path_loss_arr.append(20*log10(dist) + 20*log10(tx_freq) + 32.44)
+			dist_arr.append(dist)
+
+	x = np.array(dist_arr)
+	y = np.array(path_loss_arr)
+	plt.plot(x, y)
+	plt.show()
+
+
+fspl_bool, fspl2_bool, hms_bool, hl_bool = pl_calc()
+plp(path_loss, distance, fspl_bool, fspl2_bool, hms_bool, hl_bool, freq)
