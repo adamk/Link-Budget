@@ -55,7 +55,7 @@ Receiver sensitivity:  [RX Sensitivity in dBm]
 **************
 
 
-**\\Propagation Model Explanations//**
+**\\\Propagation Model Explanations//**
 
 FSPL (Free Space Path Loss)
 
