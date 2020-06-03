@@ -63,7 +63,10 @@ FSPL (Free Space Path Loss)
 FSPL2 (2-Ray Propogation Model w/ Ground Reflections) 
 
 *Okumura-Hata Models (valid from 400 MHz to 1.5 GHz)*
+
 *based on open area urban losses, not surburban
+
+*only use for base antenna height 30m-200m
 
 HMS (medium-small city)
 
