@@ -48,7 +48,7 @@ Power left at input:  [Power in dBm]
 
 Receiver sensitivity:  [RX Sensitivity in dBm]
 
-**Link Margin** 
+\*\*Link Margin\*\* 
 
 [Link Margin in dBm]
 
