@@ -52,6 +52,7 @@ Receiver sensitivity:  [RX Sensitivity in dBm]
 
 [Link Margin in dBm]
 
+PLOT OPENS IN NEW WINDOW
 **************
 
 
