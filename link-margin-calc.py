@@ -207,7 +207,7 @@ def plp(pl, total_dist, model1, model2, model3, model4, tx_freq, tnp, nf, sn, tx
 			wave_len = c/(freq*1000000)
 			phi = atan((hb+hm)/(dist*1000)); # phi incident angle to ground.
 			direct_wave=sqrt(pow(abs(hb-hm),2)+pow(dist*1000, 2)); # Distance, traveled direct wave
-			refl_wave=sqrt(pow(distance*1000,2)+pow((hb+hm),2)); # Distance, traveled reflected wave
+			refl_wave=sqrt(pow(dist*1000,2)+pow((hb+hm),2)); # Distance, traveled reflected wave
 			gamma=(er*sin(phi)-sqrt(er-pow(cos(phi),2)))/(er*sin(phi)+sqrt(er-pow(cos(phi),2))); # Vertical polarization
 			length_diff=refl_wave-direct_wave;
 			cos_phase_diff=cos(length_diff*2*pi/wave_len)*sign(gamma);
@@ -255,7 +255,7 @@ def plp(pl, total_dist, model1, model2, model3, model4, tx_freq, tnp, nf, sn, tx
 	plt.plot(x1, y2, "-g", label = "link margin")
 	j = 0
 	for xy in zip(x1,y1):
-		if round(y2[j],2) == round(link_margin2, 2):
+		if round(y2[j],1) == round(link_margin2, 1):
 			plt.annotate('Breakpoint: (%.2f, %.2f)' % xy, xy = xy, textcoords = 'data')
 			break
 		j += 1
