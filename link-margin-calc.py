@@ -74,7 +74,7 @@ def pl_calc():
 			a_hm = (1.1*log10(freq)-0.7)*hm - (1.56*log10(freq)-0.8)
 
 			# General Hata Model Equation
-			Lp = 69.55 + 26.16*log10(freq) - 13.82*log10(hb) - a_hm + (44.9 - 6.55*log10(hb))*log10(distance);
+			Lp = 46.3 + 33.9*log10(freq)-13.82*log10(hb) - a_hm + (44.9 - 6.55*log10(hb))*log10(distance)
 			# Hata Model (Open Area) - based on urban losses
 			path_loss = Lp - 4.78*(pow(log10(freq), 2)) + 18.33*log10(freq) - 40.94;
 			hms_bool = True
@@ -82,7 +82,7 @@ def pl_calc():
 			# Correction factor (large city)
 			a_hm2 = 3.2*(pow(log10(11.75*hm),2)) - 4.97
 			# General Hata Model Equation
-			Lp = 69.55 + 26.16*log10(freq) - 13.82*log10(hb) - a_hm + (44.9 - 6.55*log10(hb))*log10(distance);
+			Lp = 46.3 + 33.9*log10(freq)-13.82*log10(hb) - a_hm2 + (44.9 - 6.55*log10(hb))*log10(distance)
 			# Hata Model (Open Area) - based on urban losses
 			path_loss = Lp - 4.78*(pow(log10(freq), 2)) + 18.33*log10(freq) - 40.94;
 			hl_bool = True
@@ -106,7 +106,7 @@ def pl_calc():
 		noise_figure = float(input('Enter receiver NF: '));
 		sig_to_noise = float(input('Enter receiver\'s required S/N: '));
 
-		prop_model = input("Choose propagation model: 'FSPL', 'FSPL2'(ground refl only), 'HMS'(Hata med-small), 'HL'(Hata large): ")
+		prop_model = input("Choose propagation model: 'FSPL', 'FSPL2'(ground refl), 'HMS'(Hata med-small), 'HL'(Hata large): ")
 		if (prop_model.upper() == 'FSPL'):
 			path_loss = 20*log10(distance) + 20*log10(freq) + 32.44
 			fspl_bool = True
@@ -117,7 +117,7 @@ def pl_calc():
 			a_hm = (1.1*log10(freq)-0.7)*hm - (1.56*log10(freq)-0.8)
 
 			# General Hata Model Equation
-			Lp = 69.55 + 26.16*log10(freq) - 13.82*log10(hb) - a_hm + (44.9 - 6.55*log10(hb))*log10(distance);
+			Lp = 46.3 + 33.9*log10(freq)-13.82*log10(hb) - a_hm + (44.9 - 6.55*log10(hb))*log10(distance)
 			# Hata Model (Open Area) - based on urban losses
 			path_loss = Lp - 4.78*(pow(log10(freq), 2)) + 18.33*log10(freq) - 40.94;
 			hms_bool = True
@@ -127,7 +127,7 @@ def pl_calc():
 			# Correction factor (large city)
 			a_hm2 = 3.2*(pow(log10(11.75*hm),2)) - 4.97
 			# General Hata Model Equation
-			Lp = 69.55 + 26.16*log10(freq) - 13.82*log10(hb) - a_hm2 + (44.9 - 6.55*log10(hb))*log10(distance);
+			Lp = 46.3 + 33.9*log10(freq)-13.82*log10(hb) - a_hm2 + (44.9 - 6.55*log10(hb))*log10(distance)
 			# Hata Model (Open Area) - based on urban losses
 			path_loss = Lp - 4.78*(pow(log10(freq), 2)) + 18.33*log10(freq) - 40.94;
 			hl_bool = True
@@ -226,7 +226,7 @@ def plp(pl, total_dist, model1, model2, model3, model4, tx_freq, tnp, nf, sn, tx
 			# Correction factor (medium-small city)
 			a_hm = (1.1*log10(freq)-0.7)*hm - (1.56*log10(freq)-0.8)
 			# General Hata Model Equation
-			Lp = 69.55 + 26.16*log10(freq) - 13.82*log10(hb) - a_hm + (44.9 - 6.55*log10(hb))*log10(dist);
+			Lp = 46.3 + 33.9*log10(freq)-13.82*log10(hb) - a_hm + (44.9 - 6.55*log10(hb))*log10(dist)
 			# Hata Model (Open Area) - based on urban losses
 			path_loss_arr.append(Lp - 4.78*(pow(log10(freq), 2)) + 18.33*log10(freq) - 40.94)
 			dist_arr.append(dist)
@@ -239,7 +239,7 @@ def plp(pl, total_dist, model1, model2, model3, model4, tx_freq, tnp, nf, sn, tx
 			# Correction factor (large city)
 			a_hm2 = 3.2*(pow(log10(11.75*hm),2)) - 4.97
 			# General Hata Model Equation
-			Lp = 69.55 + 26.16*log10(freq) - 13.82*log10(hb) - a_hm2 + (44.9 - 6.55*log10(hb))*log10(dist);
+			Lp = 46.3 + 33.9*log10(freq)-13.82*log10(hb) - a_hm2 + (44.9 - 6.55*log10(hb))*log10(dist)
 			# Hata Model (Open Area) - based on urban losses
 			path_loss_arr.append(Lp - 4.78*(pow(log10(freq), 2)) + 18.33*log10(freq) - 40.94)
 			dist_arr.append(dist)
