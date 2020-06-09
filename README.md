@@ -62,7 +62,7 @@ FSPL (Free Space Path Loss)
 
 FSPL2 (2-Ray Propogation Model w/ Ground Reflections) 
 
-*Okumura-Hata Models (valid from 1.5 GHz to 2.0 GHz)*
+*Hata COST-231 Model (valid from 1.5 GHz to 2.0 GHz)*
 
 *based on open area urban losses, not surburban
 
